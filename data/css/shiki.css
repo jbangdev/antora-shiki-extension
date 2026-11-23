@@ -35,3 +35,29 @@ code.shiki.has-line-numbers .line::before {
 .doc pre.shiki > code.shiki.override-conums.with-conum-border i.conum[data-value] {
   border: 1px solid;
 }
+
+.doc pre.shiki > code.shiki {
+  color: var(--shiki-foreground-color, inherit);
+}
+
+/*
+ * Dual themes (light_theme / dark_theme): tokens carry color:<light>;--shiki-dark:<dark>.
+ * Dark mode is detected from html[data-theme="dark"] or html.dark, as set by the UI's theme toggle.
+ */
+:is(html[data-theme="dark"], html.dark) .doc pre.shiki > code.shiki {
+  background: var(--shiki-dark-background-color, var(--shiki-background-color, #f6f8fa));
+  color: var(--shiki-dark-foreground-color, var(--shiki-foreground-color, inherit));
+}
+
+:is(html[data-theme="dark"], html.dark) .doc pre.shiki span[style*="--shiki-dark:"] {
+  color: var(--shiki-dark) !important;
+}
+
+:is(html[data-theme="dark"], html.dark) code.shiki.has-line-numbers .line::before {
+  color: var(--shiki-dark-line-number-color, var(--shiki-line-number-color, rgba(115, 138, 148, 40%)));
+}
+
+:is(html[data-theme="dark"], html.dark) .doc pre.shiki > code.shiki.override-conums i.conum[data-value] {
+  color: var(--shiki-dark-conum-fg-color, var(--shiki-conum-fg-color));
+  background-color: var(--shiki-dark-conum-bg-color, var(--shiki-conum-bg-color));
+}

@@ -137,8 +137,16 @@ The extension supports the following configuration options:
 |Option |Default |Description
 
 |theme
-|nord
+|nord (or `light_theme` if set)
 |The default theme to use for syntax highlighting
+
+|light_theme
+|-
+|Light theme for light/dark mode. Must be set together with `dark_theme`.
+
+|dark_theme
+|-
+|Dark theme for light/dark mode. Must be set together with `light_theme`.
 
 |themes
 |[]
@@ -312,6 +320,25 @@ You can also enable line numbers for each code block. Check https://docs.asciido
 |===
 
 === Examples
+
+=== Light and dark themes
+
+Set both `light_theme` and `dark_theme` to render every code block with both color sets:
+
+[source,yaml]
+----
+antora:
+  extensions:
+    - require: 'antora-shiki-extension'
+      light_theme: light-plus
+      dark_theme: dark-plus
+----
+
+Each token gets `color: <light>; --shiki-dark: <dark>` and each block gets light and dark background, foreground, line-number and callout colors as CSS custom properties.
+The bundled `shiki.css` switches to the dark colors when the page is in dark mode, detected from `html[data-theme="dark"]` or `html.dark` (set these from your UI's theme toggle).
+Switching happens at runtime, without rebuilding.
+
+A `theme` attribute on a block, or `shiki-theme` on a page, still forces that single theme.
 
 == How it works
 
