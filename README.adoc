@@ -1,5 +1,5 @@
 = Antora Shiki Extension
-:url-repo: https://github.com/lask79/antora-shiki-extension
+:url-repo: https://github.com/jbangdev/antora-shiki-extension
 :url-antora-docs: https://docs.antora.org/antora/3.1
 :toc: preamble
 :toc-title: Contents
@@ -13,7 +13,18 @@
 :highlight-js: https://highlightjs.org/[Highlight.js]
 :asciidoctor-vscode: https://github.com/asciidoctor/asciidoctor-vscode[Asciidoctor VS Code Extension]
 
-image::https://img.shields.io/npm/v/antora-shiki-extension.svg[NPM version]
+[NOTE]
+====
+This is the https://github.com/jbangdev[jbangdev] fork of https://github.com/lask79/antora-shiki-extension[lask79/antora-shiki-extension], which appears unmaintained.
+It is not published to npm; install it from GitHub (see <<Installation>>).
+
+Changes in 1.1.0:
+
+* Shiki upgraded from 0.14 to 4.x (Node.js 20+)
+* `light_theme` / `dark_theme`: light and dark code colors that follow the page theme at runtime (see <<Light and dark themes>>)
+* blocks in languages that aren't loaded render as escaped plain text (with a warning) instead of raw source
+* unused runtime dependencies removed
+====
 
 == Features
 
@@ -86,8 +97,17 @@ Begin by installing the extension package into your {url-antora-docs}/playbook/u
 
 [source, console]
 ----
-$ npm i antora-shiki-extension
+$ npm i github:jbangdev/antora-shiki-extension#v1.1.0
 ----
+
+or in `package.json`:
+
+[source,json]
+----
+"antora-shiki-extension": "github:jbangdev/antora-shiki-extension#v1.1.0"
+----
+
+The package name stays `antora-shiki-extension`, so playbooks keep using `require: 'antora-shiki-extension'`.
 
 == Usage
 
@@ -137,8 +157,16 @@ The extension supports the following configuration options:
 |Option |Default |Description
 
 |theme
-|nord
+|nord (or `light_theme` if set)
 |The default theme to use for syntax highlighting
+
+|light_theme
+|-
+|Light theme for light/dark mode. Must be set together with `dark_theme`.
+
+|dark_theme
+|-
+|Dark theme for light/dark mode. Must be set together with `light_theme`.
 
 |themes
 |[]
@@ -312,6 +340,25 @@ You can also enable line numbers for each code block. Check https://docs.asciido
 |===
 
 === Examples
+
+=== Light and dark themes
+
+Set both `light_theme` and `dark_theme` to render every code block with both color sets:
+
+[source,yaml]
+----
+antora:
+  extensions:
+    - require: 'antora-shiki-extension'
+      light_theme: light-plus
+      dark_theme: dark-plus
+----
+
+Each token gets `color: <light>; --shiki-dark: <dark>` and each block gets light and dark background, foreground, line-number and callout colors as CSS custom properties.
+The bundled `shiki.css` switches to the dark colors when the page is in dark mode, detected from `html[data-theme="dark"]` or `html.dark` (set these from your UI's theme toggle).
+Switching happens at runtime, without rebuilding.
+
+A `theme` attribute on a block, or `shiki-theme` on a page, still forces that single theme.
 
 == How it works
 
